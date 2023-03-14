@@ -1,5 +1,5 @@
-import random
 import sys
+import random
 import time
 
 try:
@@ -8,7 +8,6 @@ try:
 except ImportError:
     print('Bext and colorama modules are required to run the program')
     sys.exit()
-
 
 class Drop:
     def __init__(self):
@@ -39,20 +38,14 @@ class Drop:
             con_print(self.x, self.y, green, ' ')
 
     def zero_draw(self):
-        if (self.y < height):
-            con_print(self.x, self.y + 1, lgreen, '0')
-
-
-def is_rb_corner(x, y):
-    return x == width and y == height
-
+        if self.y < height:
+            con_print(self.x, self.y+1, lgreen, '0')
 
 def con_print(x, y, color, symbol):
-    if not is_rb_corner(x, y):
+    if x != width or y != height:
         bext.goto(x, y)
         sys.stdout.write(color)
         print(symbol, end='')
-
 
 bext.title('Matrix')
 bext.clear()
@@ -64,10 +57,7 @@ height -= 1
 green = colorama.Fore.GREEN
 lgreen = colorama.Fore.LIGHTGREEN_EX
 
-drops = []
-for i in range(1, width * 2 // 3):
-    drop = Drop()
-    drops.append(drop)
+drops = [Drop() for i in range(1, width*2//3)]
 
 while True:
     for drop in drops:
@@ -75,8 +65,10 @@ while True:
             drop.draw()
             if drop.y >= height:
                 drop.renew()
+
     key = bext.getKey(blocking=False)
     if key == 'esc':
         bext.clear()
         sys.exit()
+
     time.sleep(0.02)
